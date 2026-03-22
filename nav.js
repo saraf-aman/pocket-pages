@@ -14,7 +14,8 @@ const PAGES = [
   // ── Inject CSS ────────────────────────────────────────────────────────────
   const style = document.createElement('style');
   style.textContent = `
-    .pp-top-bar{background:#111D2E;position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:${BAR_H}px;border-bottom:1px solid rgba(255,255,255,0.07);}
+    .pp-nav-wrapper{position:sticky;top:0;z-index:200;height:${BAR_H}px;}
+    .pp-top-bar{background:#111D2E;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:${BAR_H}px;border-bottom:1px solid rgba(255,255,255,0.07);}
     .pp-back{display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,0.55);font-size:13px;font-weight:500;text-decoration:none;transition:color 0.15s;}
     .pp-back:hover{color:#fff;}
     .pp-ham-btn{background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.55);display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;transition:background 0.15s,color 0.15s;padding:0;}
@@ -51,6 +52,7 @@ const PAGES = [
   }).join('');
 
   const topBar = document.createElement('div');
+  topBar.className = 'pp-nav-wrapper';
   topBar.innerHTML = `
     <div class="pp-top-bar">
       <a href="${rootPath}/index.html" class="pp-back">
