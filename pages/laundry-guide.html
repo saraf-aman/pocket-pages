@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Laundry Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#1B2C4A;--blue:#1E6FBF;--blue-l:#EAF3FC;--teal:#0A6B52;--teal-l:#E0F4EE;
+    --amber:#B06A00;--amber-l:#FEF3E0;--green:#2E6B10;--green-l:#EBF5DF;
+    --red:#9B2020;--red-l:#FCEAEA;--purple:#4A1B8C;--purple-l:#EEE8FC;
+    --gray:#3D3D3A;--gray-l:#F4F3EF;--gray-m:#C8C6BC;--white:#FFFFFF;--off:#FAFAF8;--ink:#1A1A18;
+    --radius:10px;--shadow:0 2px 16px rgba(0,0,0,0.07);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:#F0EDE6;color:var(--ink);min-height:100vh;font-size:15px;line-height:1.6;}
+
+  .site-header{background:var(--navy);padding:40px 0 32px;position:relative;overflow:hidden;}
+  .site-header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(255,255,255,0.015) 40px,rgba(255,255,255,0.015) 41px);}
+  .header-inner{max-width:960px;margin:0 auto;padding:0 24px;position:relative;}
+  .header-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:10px;}
+  .header-title{font-family:'DM Serif Display',serif;font-size:clamp(28px,5vw,42px);color:#fff;line-height:1.15;margin-bottom:8px;}
+  .header-title em{font-style:italic;color:#7EB8F5;}
+  .header-sub{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:18px;}
+  .header-meta{display:flex;flex-wrap:wrap;gap:8px;}
+  .meta-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:4px 12px;font-size:12px;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;}
+  .meta-chip span{color:#7EB8F5;font-weight:500;}
+
+  .main-nav{background:var(--white);border-bottom:1px solid #E4E2DA;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,0.06);}
+  .nav-inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;overflow-x:auto;scrollbar-width:none;}
+  .nav-inner::-webkit-scrollbar{display:none;}
+  .nav-btn{flex-shrink:0;padding:14px 15px;font-size:13px;font-weight:500;color:#999;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all 0.18s;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+  .nav-btn:hover{color:var(--navy);}
+  .nav-btn.active{color:var(--navy);border-bottom-color:var(--navy);}
+
+  .main{max-width:960px;margin:0 auto;padding:32px 24px 64px;}
+  .section{display:none;animation:fadeIn 0.22s ease;}
+  .section.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+  .page-title{font-family:'DM Serif Display',serif;font-size:24px;color:var(--navy);margin-bottom:5px;}
+  .page-desc{font-size:13.5px;color:#888;margin-bottom:24px;}
+
+  .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:18px;}
+  .card-header{padding:11px 16px;font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;background:var(--gray-l);color:#888;border-bottom:1px solid #E8E6DE;}
+
+  .cat-banner{border-radius:var(--radius);padding:20px 22px;margin-bottom:22px;position:relative;overflow:hidden;}
+  .cat-banner::after{content:attr(data-num);position:absolute;right:18px;top:50%;transform:translateY(-50%);font-family:'DM Serif Display',serif;font-size:68px;color:rgba(255,255,255,0.1);line-height:1;pointer-events:none;}
+  .cat-eyebrow{font-size:10px;letter-spacing:0.13em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;margin-bottom:3px;}
+  .cat-title{font-family:'DM Serif Display',serif;font-size:22px;color:#fff;line-height:1.2;margin-bottom:5px;}
+  .cat-subtitle{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.5;}
+  .c1{background:linear-gradient(135deg,#1B3E6E,#1E6FBF);}
+  .c3{background:linear-gradient(135deg,#084D3C,#0A8C6A);}
+  .c4{background:linear-gradient(135deg,#1A4D32,#2D8A5E);}
+  .c5{background:linear-gradient(135deg,#2D0F5C,#6B2FBF);}
+  .cref{background:linear-gradient(135deg,#1B2C4A,#2D4A7A);}
+
+  .settings-list{list-style:none;}
+  .setting-item{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-bottom:1px solid #F0EDE6;gap:10px;}
+  .setting-item:last-child{border-bottom:none;}
+  .setting-key{font-size:13.5px;color:var(--gray);flex:1;}
+  .sval{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;font-family:'DM Mono',monospace;}
+  .vblue{background:var(--blue-l);color:var(--blue);}
+  .vamber{background:var(--amber-l);color:var(--amber);}
+  .vgreen{background:var(--green-l);color:var(--green);}
+  .vred{background:var(--red-l);color:var(--red);}
+  .vteal{background:var(--teal-l);color:var(--teal);}
+  .von{background:var(--green-l);color:var(--green);}
+  .voff{background:var(--gray-l);color:#888;}
+
+  .note{border-left:3px solid var(--blue);background:var(--blue-l);padding:9px 13px;font-size:13px;color:#444;line-height:1.55;margin:10px 16px;border-radius:0 6px 6px 0;}
+  .nwarn{border-color:var(--amber);background:var(--amber-l);}
+  .ngood{border-color:var(--green);background:var(--green-l);}
+  .nred{border-color:var(--red);background:var(--red-l);}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
+  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+
+  .ref-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .ref-table thead tr{background:var(--navy);}
+  .ref-table th{padding:8px 11px;text-align:left;color:#fff;font-weight:500;font-size:11.5px;letter-spacing:0.03em;}
+  .ref-table td{padding:9px 11px;color:var(--gray);vertical-align:top;line-height:1.5;border-bottom:1px solid #F0EDE6;}
+  .ref-table tbody tr:nth-child(even) td{background:var(--gray-l);}
+  .ref-table td:first-child{font-weight:600;color:var(--navy);white-space:nowrap;}
+  .ref-table .hl td{background:var(--blue-l)!important;}
+
+  .summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:28px;}
+  .sc{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;border:2px solid transparent;}
+  .sc:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.1);}
+  .sc-top{padding:14px 16px 10px;color:#fff;}
+  .sc-num{font-family:'DM Mono',monospace;font-size:10px;opacity:0.65;letter-spacing:0.1em;margin-bottom:2px;}
+  .sc-name{font-family:'DM Serif Display',serif;font-size:16px;line-height:1.2;}
+  .sc-body{padding:11px 14px;}
+  .sc-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid #F0EDE6;font-size:12px;}
+  .sc-row:last-child{border-bottom:none;}
+  .sc-label{color:#999;}
+  .sc-val{font-weight:600;color:var(--navy);font-family:'DM Mono',monospace;font-size:11.5px;}
+
+  .det-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px;margin-bottom:22px;}
+  .det-card{border:2px solid #E8E6DE;border-radius:8px;padding:13px 15px;cursor:pointer;transition:all 0.15s;}
+  .det-card:hover{border-color:var(--blue);}
+  .det-card.active{border-color:var(--blue);background:var(--blue-l);}
+  .det-name{font-weight:600;font-size:13.5px;color:var(--navy);margin-bottom:2px;}
+  .det-sub{font-size:12px;color:#999;}
+
+  .step-list{list-style:none;counter-reset:steps;}
+  .step-item{counter-increment:steps;display:flex;gap:12px;padding:11px 16px;border-bottom:1px solid #F0EDE6;align-items:flex-start;}
+  .step-item:last-child{border-bottom:none;}
+  .step-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;font-family:'DM Mono',monospace;}
+  .step-text{font-size:13.5px;color:var(--gray);line-height:1.55;}
+  .step-text strong{color:var(--ink);}
+
+  .subsec{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin:22px 0 10px;}
+
+  .alert{border-radius:8px;padding:12px 15px;display:flex;gap:10px;align-items:flex-start;margin-bottom:18px;font-size:13px;line-height:1.55;}
+  .awarn{background:var(--amber-l);border:1px solid #E8C070;color:#7A4800;}
+  .agood{background:var(--green-l);border:1px solid #90C870;color:#1A4D08;}
+  .ared{background:var(--red-l);border:1px solid #E08080;color:#6A1010;}
+  .aicon{font-size:16px;flex-shrink:0;margin-top:1px;}
+
+  .mb20{margin-bottom:20px;}
+  .back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none;margin-bottom:18px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.05em;}
+  .back-link:hover{color:#fff;}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../index.html" class="back-link">← Pocket Pages</a>
+    <div class="header-eyebrow">Personal Reference</div>
+    <h1 class="header-title">Laundry <em>Guide</em></h1>
+    <p class="header-sub">Wash categories · Detergent dosing · Washer &amp; dryer settings</p>
+    <div class="header-meta">
+      <div class="meta-chip">Washer <span>Samsung WF45T6000AW</span></div>
+      <div class="meta-chip">Dryer <span>Whirlpool WHD5090GW</span></div>
+      <div class="meta-chip">Detergent <span>Tide HE Turbo</span></div>
+    </div>
+  </div>
+</header>
+
+<nav class="main-nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="show('overview',this)">Overview</button>
+    <button class="nav-btn" onclick="show('cat1',this)">Cat 1 — Dress</button>
+    <button class="nav-btn" onclick="show('cat2',this)">Cat 2 — Casual</button>
+    <button class="nav-btn" onclick="show('cat3',this)">Cat 3 — Innerwear</button>
+    <button class="nav-btn" onclick="show('cat4',this)">Cat 4 — Towels</button>
+    <button class="nav-btn" onclick="show('cat5',this)">Cat 5 — Percale</button>
+    <button class="nav-btn" onclick="show('wref',this)">Washer Ref</button>
+    <button class="nav-btn" onclick="show('dref',this)">Dryer Ref</button>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- OVERVIEW -->
+<section id="overview" class="section active">
+  <p class="page-title">All Categories</p>
+  <p class="page-desc">Tap any category to see full wash instructions.</p>
+
+  <div class="summary-grid">
+    <div class="sc" onclick="show('cat1', document.querySelectorAll('.nav-btn')[1])">
+      <div class="sc-top c1"><div class="sc-num">CAT 01</div><div class="sc-name">Dress Shirts &amp; Formal</div></div>
+      <div class="sc-body">
+        <div class="sc-row"><span class="sc-label">Cycle</span><span class="sc-val">Delicates</span></div>
+        <div class="sc-row"><span class="sc-label">Temp</span><span class="sc-val">Cold 59°F</span></div>
+        <div class="sc-row"><span class="sc-label">Spin</span><span class="sc-val">Low</span></div>
+        <div class="sc-row"><span class="sc-label">Dry</span><span class="sc-val">Hang dry</span></div>
+      </div>
+    </div>
+    <div class="sc" onclick="show('cat2', document.querySelectorAll('.nav-btn')[2])">
+      <div class="sc-top c1"><div class="sc-num">CAT 02</div><div class="sc-name">Casual &amp; T-Shirts</div></div>
+      <div class="sc-body">
+        <div class="sc-row"><span class="sc-label">Cycle</span><span class="sc-val">Normal</span></div>
+        <div class="sc-row"><span class="sc-label">Temp</span><span class="sc-val">Cold 59°F</span></div>
+        <div class="sc-row"><span class="sc-label">Spin</span><span class="sc-val">Colors preset</span></div>
+        <div class="sc-row"><span class="sc-label">Dry</span><span class="sc-val">Hang dry</span></div>
+      </div>
+    </div>
+    <div class="sc" onclick="show('cat3', document.querySelectorAll('.nav-btn')[3])">
+      <div class="sc-top c3"><div class="sc-num">CAT 03</div><div class="sc-name">Innerwear &amp; Socks</div></div>
+      <div class="sc-body">
+        <div class="sc-row"><span class="sc-label">Cycle</span><span class="sc-val">Normal</span></div>
+        <div class="sc-row"><span class="sc-label">Temp</span><span class="sc-val">Warm 85°F</span></div>
+        <div class="sc-row"><span class="sc-label">Spin</span><span class="sc-val">High</span></div>
+        <div class="sc-row"><span class="sc-label">Dry</span><span class="sc-val">Dryer — Normal</span></div>
+      </div>
+    </div>
+    <div class="sc" onclick="show('cat4', document.querySelectorAll('.nav-btn')[4])">
+      <div class="sc-top c4"><div class="sc-num">CAT 04</div><div class="sc-name">Towels &amp; Bath Mats</div></div>
+      <div class="sc-body">
+        <div class="sc-row"><span class="sc-label">Cycle</span><span class="sc-val">Heavy Duty</span></div>
+        <div class="sc-row"><span class="sc-label">Temp</span><span class="sc-val">Hot 104°F</span></div>
+        <div class="sc-row"><span class="sc-label">Spin</span><span class="sc-val">Max</span></div>
+        <div class="sc-row"><span class="sc-label">Dry</span><span class="sc-val">Dryer — Normal</span></div>
+      </div>
+    </div>
+    <div class="sc" onclick="show('cat5', document.querySelectorAll('.nav-btn')[5])">
+      <div class="sc-top c5"><div class="sc-num">CAT 05</div><div class="sc-name">Percale Sheets</div></div>
+      <div class="sc-body">
+        <div class="sc-row"><span class="sc-label">Cycle</span><span class="sc-val">Bedding</span></div>
+        <div class="sc-row"><span class="sc-label">Temp</span><span class="sc-val">Warm 85°F</span></div>
+        <div class="sc-row"><span class="sc-label">Spin</span><span class="sc-val">Med</span></div>
+        <div class="sc-row"><span class="sc-label">Dry</span><span class="sc-val">Dryer — Delicates</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAT 1 -->
+<section id="cat1" class="section">
+  <div class="cat-banner c1" data-num="1"><div><div class="cat-eyebrow">Category 01</div><div class="cat-title">Dress Shirts &amp; Formal Wear</div><div class="cat-subtitle">Dress shirts, formal trousers, blazers, delicate fabrics · Hang dry only</div></div></div>
+  <div class="alert awarn"><span class="aicon">⚠</span><div><strong>Hang dry only.</strong> Never machine dry Cat 1. Lay flat or hang immediately after wash to preserve shape and prevent shrinkage.</div></div>
+  <div class="subsec">Washer Settings</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Cycle</span><span class="sval vblue">Delicates</span></li>
+    <li class="setting-item"><span class="setting-key">Temperature</span><span class="sval vblue">Cold — 59°F / 15°C</span></li>
+    <li class="setting-item"><span class="setting-key">Spin Speed</span><span class="sval vblue">Low</span></li>
+    <li class="setting-item"><span class="setting-key">TumbleFresh</span><span class="sval von">ON</span></li>
+    <li class="setting-item"><span class="setting-key">Extra Rinse</span><span class="sval von">ON</span></li>
+  </ul></div>
+  <div class="subsec">Detergent</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Detergent (Compartment II)</span><span class="sval vblue">1 cap line (small load)</span></li>
+    <li class="setting-item"><span class="setting-key">Softener (Compartment III)</span><span class="sval voff">None</span></li>
+  </ul></div>
+  <div class="subsec">After Wash</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Drying Method</span><span class="sval vamber">Hang dry immediately</span></li>
+    <li class="setting-item"><span class="setting-key">Machine Dry</span><span class="sval vred">NEVER</span></li>
+  </ul></div>
+</section>
+
+<!-- CAT 2 -->
+<section id="cat2" class="section">
+  <div class="cat-banner c1" data-num="2"><div><div class="cat-eyebrow">Category 02</div><div class="cat-title">Casual Wear &amp; T-Shirts</div><div class="cat-subtitle">T-shirts, casual shirts, joggers, hoodies, jeans · Hang dry</div></div></div>
+  <div class="alert awarn"><span class="aicon">⚠</span><div><strong>Hang dry only.</strong> Machine drying casual wear causes shrinkage and fading over time. Use the Colors preset button — it sets both temperature and spin together.</div></div>
+  <div class="subsec">Washer Settings</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Cycle</span><span class="sval vblue">Normal</span></li>
+    <li class="setting-item"><span class="setting-key">Temperature + Spin</span><span class="sval vblue">Colors preset button (sets Cold 59°F + Colors spin)</span></li>
+    <li class="setting-item"><span class="setting-key">TumbleFresh</span><span class="sval von">ON</span></li>
+    <li class="setting-item"><span class="setting-key">Extra Rinse</span><span class="sval von">ON</span></li>
+  </ul></div>
+  <div class="subsec">Detergent</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Detergent (Compartment II)</span><span class="sval vblue">2 cap lines (medium load)</span></li>
+    <li class="setting-item"><span class="setting-key">Softener (Compartment III)</span><span class="sval voff">None</span></li>
+  </ul></div>
+  <div class="subsec">After Wash</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Drying Method</span><span class="sval vamber">Hang dry immediately</span></li>
+    <li class="setting-item"><span class="setting-key">Machine Dry</span><span class="sval vred">NEVER</span></li>
+  </ul></div>
+</section>
+
+<!-- CAT 3 -->
+<section id="cat3" class="section">
+  <div class="cat-banner c3" data-num="3"><div><div class="cat-eyebrow">Category 03</div><div class="cat-title">Innerwear &amp; Socks</div><div class="cat-subtitle">Underwear, undershirts, socks · Machine dry — Normal cycle</div></div></div>
+  <div class="subsec">Washer Settings</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Cycle</span><span class="sval vteal">Normal</span></li>
+    <li class="setting-item"><span class="setting-key">Temperature</span><span class="sval vteal">Warm — 85°F / 30°C</span></li>
+    <li class="setting-item"><span class="setting-key">Spin Speed</span><span class="sval vteal">High</span></li>
+    <li class="setting-item"><span class="setting-key">TumbleFresh</span><span class="sval von">ON</span></li>
+    <li class="setting-item"><span class="setting-key">Extra Rinse</span><span class="sval von">ON</span></li>
+  </ul></div>
+  <div class="subsec">Detergent</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Detergent (Compartment II)</span><span class="sval vteal">2 cap lines</span></li>
+    <li class="setting-item"><span class="setting-key">Softener (Compartment III)</span><span class="sval voff">None</span></li>
+  </ul></div>
+  <div class="subsec">Dryer Settings</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Cycle</span><span class="sval vteal">Normal</span></li>
+    <li class="setting-item"><span class="setting-key">Dryness Level</span><span class="sval vteal">Dry (Normal)</span></li>
+    <li class="setting-item"><span class="setting-key">Wrinkle Shield</span><span class="sval von">ON</span></li>
+    <li class="setting-item"><span class="setting-key">Gentle</span><span class="sval voff">OFF</span></li>
+  </ul></div>
+</section>
+
+<!-- CAT 4 -->
+<section id="cat4" class="section">
+  <div class="cat-banner c4" data-num="4"><div><div class="cat-eyebrow">Category 04</div><div class="cat-title">Towels &amp; Bath Mats</div><div class="cat-subtitle">Bath towels, hand towels, bath mats · Machine dry — Normal cycle</div></div></div>
+  <div class="subsec">Washer Settings</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Cycle</span><span class="sval vgreen">Heavy Duty</span></li>
+    <li class="setting-item"><span class="setting-key">Temperature</span><span class="sval vgreen">Hot — 104°F / 40°C</span></li>
+    <li class="setting-item"><span class="setting-key">Spin Speed</span><span class="sval vgreen">Max</span></li>
+    <li class="setting-item"><span class="setting-key">TumbleFresh</span><span class="sval von">ON</span></li>
+    <li class="setting-item"><span class="setting-key">Extra Rinse</span><span class="sval von">ON</span></li>
+  </ul></div>
+  <div class="subsec">Detergent</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Detergent (Compartment II)</span><span class="sval vgreen">3 cap lines (full load)</span></li>
+    <li class="setting-item"><span class="setting-key">Softener (Compartment III)</span><span class="sval voff">None — reduces absorbency</span></li>
+  </ul></div>
+  <div class="subsec">Dryer Settings</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Cycle</span><span class="sval vgreen">Normal</span></li>
+    <li class="setting-item"><span class="setting-key">Dryness Level</span><span class="sval vgreen">Dry (Normal)</span></li>
+    <li class="setting-item"><span class="setting-key">Wrinkle Shield</span><span class="sval von">ON</span></li>
+    <li class="setting-item"><span class="setting-key">Gentle</span><span class="sval voff">OFF</span></li>
+  </ul></div>
+</section>
+
+<!-- CAT 5 -->
+<section id="cat5" class="section">
+  <div class="cat-banner c5" data-num="5"><div><div class="cat-eyebrow">Category 05</div><div class="cat-title">Percale Sheets</div><div class="cat-subtitle">Percale cotton sheets · Dryer on Delicates — remove at Damp Dry</div></div></div>
+  <div class="alert awarn"><span class="aicon">⚠</span><div><strong>Remove at Damp Dry.</strong> Percale must be removed while slightly damp and spread flat or hung to finish drying. Do NOT leave in dryer or use Wrinkle Shield — over-drying causes permanent creasing.</div></div>
+  <div class="subsec">Washer Settings</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Cycle</span><span class="sval" style="background:var(--purple-l);color:var(--purple)">Bedding</span></li>
+    <li class="setting-item"><span class="setting-key">Temperature</span><span class="sval" style="background:var(--purple-l);color:var(--purple)">Warm — 85°F / 30°C</span></li>
+    <li class="setting-item"><span class="setting-key">Spin Speed</span><span class="sval" style="background:var(--purple-l);color:var(--purple)">Med</span></li>
+    <li class="setting-item"><span class="setting-key">TumbleFresh</span><span class="sval von">ON</span></li>
+    <li class="setting-item"><span class="setting-key">Extra Rinse</span><span class="sval von">ON</span></li>
+  </ul></div>
+  <div class="subsec">Detergent</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Detergent (Compartment II)</span><span class="sval" style="background:var(--purple-l);color:var(--purple)">2 cap lines</span></li>
+    <li class="setting-item"><span class="setting-key">Softener (Compartment III)</span><span class="sval voff">None</span></li>
+  </ul></div>
+  <div class="subsec">Dryer Settings</div>
+  <div class="card"><ul class="settings-list">
+    <li class="setting-item"><span class="setting-key">Cycle</span><span class="sval" style="background:var(--purple-l);color:var(--purple)">Delicates</span></li>
+    <li class="setting-item"><span class="setting-key">Dryness Level</span><span class="sval" style="background:var(--purple-l);color:var(--purple)">Damp Dry</span></li>
+    <li class="setting-item"><span class="setting-key">Gentle</span><span class="sval von">ON</span></li>
+    <li class="setting-item"><span class="setting-key">Wrinkle Shield</span><span class="sval vred">OFF — must remove at Damp Dry</span></li>
+  </ul></div>
+</section>
+
+<!-- WASHER REF -->
+<section id="wref" class="section">
+  <div class="cat-banner cref" data-num=""><div><div class="cat-eyebrow">Reference</div><div class="cat-title">Washer — Samsung WF45T6000AW</div><div class="cat-subtitle">All cycles · All buttons · Options sub-menu mapped</div></div></div>
+
+  <div class="subsec">Cycles (turn dial)</div>
+  <div class="card mb20">
+    <table class="ref-table"><thead><tr><th>Cycle</th><th>What it does</th><th>Used in this guide</th></tr></thead>
+    <tbody>
+      <tr><td>Quick Wash</td><td>15-min fast wash for lightly soiled items only</td><td>Not used</td></tr>
+      <tr><td>Rinse+Spin</td><td>Rinse and spin only — no detergent cycle</td><td>Not used</td></tr>
+      <tr class="hl"><td>Delicates</td><td>Gentle agitation + low spin — protects fine fabrics</td><td>Cat 1 Dress shirts</td></tr>
+      <tr class="hl"><td>Normal</td><td>Standard everyday wash</td><td>Cat 2 Casual · Cat 3 Innerwear</td></tr>
+      <tr class="hl"><td>Heavy Duty</td><td>Extended wash + high temp for heavily soiled items</td><td>Cat 4 Towels</td></tr>
+      <tr class="hl"><td>Bedding</td><td>Designed for sheets and pillowcases — gentle tumble to prevent tangling</td><td>Cat 5 Percale sheets</td></tr>
+      <tr><td>Spin Only</td><td>Spin cycle only — no wash</td><td>Not used</td></tr>
+      <tr><td>Self Clean</td><td>Drum cleaning cycle — run monthly with no clothes</td><td>Monthly maintenance</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="subsec">Control Panel Buttons</div>
+  <div class="card mb20">
+    <table class="ref-table"><thead><tr><th>Button</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td>Program (P)</td><td>Cycle selection mode</td></tr>
+      <tr class="hl"><td>Colors</td><td>Unified preset button — pressing this sets BOTH cold temperature (59°F/15°C) AND Colors spin speed together in one press. Used for Cat 1 &amp; 2. Do not separately adjust spin after this.</td></tr>
+      <tr class="hl"><td>TumbleFresh</td><td>Tumbles clothes every 3 min for 7 sec, for up to 6 hrs after cycle ends. Prevents creasing if you can't unload immediately. Keep ON as your default — safe and useful for all categories.</td></tr>
+      <tr><td>Detergent (hold 3 sec)</td><td>Detergent dosing aid — not used, we measure manually with the Tide cap</td></tr>
+      <tr><td>Delay Wash</td><td>Set a timer to start the cycle at a later time</td></tr>
+      <tr><td>Temp</td><td>Press to cycle through temperature options</td></tr>
+      <tr><td>Spin Speed</td><td>Press to cycle through: Max → High → Med → Low → Off</td></tr>
+      <tr><td>Options (hold 3 sec)</td><td>Opens the Options sub-menu (Extra Rinse, Heavy Soil, Cold Water Prewash, Warm Rinse, Prewash, Save Time, Control Lock)</td></tr>
+      <tr><td>Start / Pause</td><td>Touch to start. Hold to pause a running cycle.</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="subsec">Options Sub-Menu — Right Side Panel Icons (hold Options button 3 sec to open)</div>
+  <div class="card">
+    <table class="ref-table"><thead><tr><th>Option Name</th><th>Panel Icon — top to bottom</th><th>What it does</th><th>This guide</th></tr></thead>
+    <tbody>
+      <tr><td>Save Time</td><td>Clock / sun icon — top of panel</td><td>Shorter, quicker wash cycle. For lightly soiled loads only.</td><td>Not used</td></tr>
+      <tr class="hl"><td>Extra Rinse</td><td>Dotted spray / water drops icon</td><td>Extends rinse time to remove detergent residue. Especially good for sensitive skin and HE machines where residue builds up easily.</td><td>ON — all categories</td></tr>
+      <tr><td>Heavy Soil</td><td>Shirt with stain icon</td><td>Optimises stain removal with oxygen-based powder additive in compartment II. Adds up to 15 min. No chlorine bleach.</td><td>Only if heavily stained</td></tr>
+      <tr><td>Cold Water Prewash for Stains</td><td>Bag / bottle icon</td><td>Cold soak + 10 extra min before main wash. Works on most stains except grease and oil.</td><td>Only if visible stain present</td></tr>
+      <tr><td>Warm Rinse</td><td>Thermometer with water dots icon</td><td>Ends cycle with a warm rinse to relax fibres.</td><td>Not used</td></tr>
+      <tr><td>Prewash</td><td>Tub / basin icon</td><td>Adds a 20-min prewash before the main cycle. For heavily soiled loads.</td><td>Not used — pre-treat stains manually</td></tr>
+      <tr><td>Control Lock</td><td>Key icon — bottom of panel</td><td>Locks all buttons and knob. Hold Options button 3 sec to activate or deactivate.</td><td>Use to prevent accidents</td></tr>
+    </tbody></table>
+  </div>
+</section>
+
+<!-- DRYER REF -->
+<section id="dref" class="section">
+  <div class="cat-banner cref" data-num=""><div><div class="cat-eyebrow">Reference</div><div class="cat-title">Dryer — Whirlpool WHD5090GW</div><div class="cat-subtitle">Heat pump dryer · All cycles · All options icons mapped · Maintenance schedule</div></div></div>
+  <div class="alert awarn"><span class="aicon">⚠</span><div><strong>Heat pump dryer:</strong> Runs cooler and longer than conventional dryers — completely normal and gentler on fabrics. Always use Automatic Cycles (never Timed Dry). Do not open door mid-cycle. Clean lint screen before every load. Clean bottom filter every 5 loads.</div></div>
+
+  <div class="subsec">Cycles (turn dial)</div>
+  <div class="card mb20">
+    <table class="ref-table"><thead><tr><th>Cycle</th><th>What it does</th><th>Used in this guide</th></tr></thead>
+    <tbody>
+      <tr><td>Mixed</td><td>Medium heat — large loads of mixed fabrics and blends</td><td>Not used</td></tr>
+      <tr><td>Heavy Duty</td><td>Higher heat for heavyweight items like work clothes</td><td>Not used</td></tr>
+      <tr class="hl"><td>Normal</td><td>Standard cotton cycle — automatic moisture sensor stops when dry</td><td>Cat 3 Innerwear · Cat 4 Towels</td></tr>
+      <tr><td>Synthetics</td><td>Lower heat for synthetic fabrics</td><td>Not used</td></tr>
+      <tr class="hl"><td>Delicates</td><td>Lower heat + gentle tumbling — protects fine weaves</td><td>Cat 5 Percale sheets</td></tr>
+      <tr><td>Wool</td><td>Gentle process for wool garments</td><td>Not used</td></tr>
+      <tr><td>Bulky/Bedding</td><td>For large bulky items like duvets and comforters</td><td>Not used</td></tr>
+      <tr><td>Air Dry</td><td>No heat — tumbles only. For airing or refreshing items.</td><td>Not used</td></tr>
+      <tr><td>Timed Dry</td><td>Runs for a manually set time (15–120 min)</td><td>AVOID — use Automatic Cycles</td></tr>
+      <tr><td>Refresh</td><td>Reduces odours and light wrinkles on already-dry items</td><td>Optional anytime</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="subsec">Dryness Levels</div>
+  <div class="card mb20">
+    <table class="ref-table"><thead><tr><th>Level</th><th>What it means</th><th>Used for</th></tr></thead>
+    <tbody>
+      <tr><td>X-Dry</td><td>Extra dry — sensor runs longer than needed. Can over-dry and cause shrinkage.</td><td>Not used in this guide</td></tr>
+      <tr class="hl"><td>Dry (Normal)</td><td>Standard — sensor stops automatically when the load is fully dry</td><td>Cat 3 Innerwear · Cat 4 Towels</td></tr>
+      <tr class="hl"><td>Damp Dry</td><td>Stops while slightly damp — intentionally used for Percale only</td><td>Cat 5 Percale sheets only</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="subsec">Dryer Options — Right Side Panel Icons</div>
+  <div class="card mb20">
+    <table class="ref-table"><thead><tr><th>Option Name</th><th>Panel Icon</th><th>What it does</th><th>This guide</th></tr></thead>
+    <tbody>
+      <tr><td>Save Time</td><td>Sun / clock icon — top of panel</td><td>Quicker drying — shorter cycle time</td><td>Not used</td></tr>
+      <tr class="hl"><td>Gentle</td><td>Sun with lines icon</td><td>Reduces drying temperature further — ideal for delicate fabrics</td><td>ON for Cat 5 Percale only. OFF for everything else.</td></tr>
+      <tr class="hl"><td>Wrinkle Shield</td><td>Hand / tumble icon</td><td>Tumbles clothes periodically for up to 12 hrs after cycle ends — prevents creasing if you can't unload immediately</td><td>ON for Cat 3 &amp; 4. OFF for Cat 5 (must remove at Damp Dry).</td></tr>
+      <tr><td>Steam</td><td>Steam / cloud icon</td><td>Adds humidity at end of cycle to smooth wrinkles</td><td>Not used</td></tr>
+      <tr><td>Control Lock</td><td>Key icon</td><td>Hold to lock or unlock all dryer controls</td><td>Use to prevent accidental changes</td></tr>
+      <tr><td>Cycle Signal</td><td>Bell / speaker icon</td><td>Beeps at end of cycle. Hold 1 second to toggle sound on or off.</td><td>Personal preference</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="subsec">Maintenance Schedule</div>
+  <div class="card">
+    <table class="ref-table"><thead><tr><th>Task</th><th>Frequency</th><th>Location</th><th>How to do it</th></tr></thead>
+    <tbody>
+      <tr><td>Clean lint screen</td><td>Before every load</td><td>Inside door opening</td><td>Open dryer. Find screen at door opening. Peel lint off with fingers. Press firmly back in place.</td></tr>
+      <tr><td>Clean bottom filter</td><td>Every 5 loads</td><td>Bottom front of dryer</td><td>Open small door at bottom front. Pull handle to remove. Clean thoroughly. Push back in firmly.</td></tr>
+      <tr><td>Empty water tank</td><td>When indicator light on</td><td>Top left (if using tank)</td><td>Pull out tank carefully. Empty into sink. Slide back in until it clicks.</td></tr>
+      <tr><td>Wipe drum</td><td>Monthly</td><td>Inside drum</td><td>Damp cloth only. No harsh chemicals.</td></tr>
+    </tbody></table>
+  </div>
+</section>
+
+</main>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function selDet(el) {
+  document.querySelectorAll('.det-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

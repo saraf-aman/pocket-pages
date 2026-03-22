@@ -78,10 +78,10 @@
     <p>Personal tools &amp; pages — built with Claude, hosted here.</p>
   </header>
   <div class="grid" id="pages-grid"></div>
-  <div class="empty" id="empty-state">No pages yet. Ask Claude to build something!</div>
+  <div class="empty" id="empty-state" style="display:none"></div>
   <script>
     const pages = [
-      // { title: "My Tool", desc: "Does something useful", href: "pages/my-tool.html" },
+      { title: "Wash & Dry Reference", desc: "Step-by-step laundry guide: categories, detergent dosing, washer & dryer settings for every load type.", href: "pages/laundry-guide.html" },
     ];
     const grid = document.getElementById('pages-grid');
     const empty = document.getElementById('empty-state');
@@ -94,6 +94,8 @@
         a.innerHTML = `<div class="card-title">${p.title}</div><div class="card-desc">${p.desc}</div>`;
         grid.appendChild(a);
       });
+    } else {
+      empty.style.display = 'block';
     }
   </script>
 </body>
