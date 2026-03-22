@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pocket Pages</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: #e8e8e8;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+    header {
+      max-width: 640px;
+      margin: 0 auto 2.5rem;
+    }
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    header p {
+      margin-top: 0.4rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .grid {
+      max-width: 640px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, background 0.15s;
+      display: block;
+    }
+    .card:hover {
+      border-color: #555;
+      background: #222;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .card-desc {
+      font-size: 0.82rem;
+      color: #777;
+      margin-top: 0.3rem;
+      line-height: 1.4;
+    }
+    .empty {
+      max-width: 640px;
+      margin: 0 auto;
+      color: #444;
+      font-size: 0.9rem;
+      border: 1px dashed #2a2a2a;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📄 Pocket Pages</h1>
+    <p>Personal tools &amp; pages — built with Claude, hosted here.</p>
+  </header>
+  <div class="grid" id="pages-grid"></div>
+  <div class="empty" id="empty-state">No pages yet. Ask Claude to build something!</div>
+  <script>
+    const pages = [
+      // { title: "My Tool", desc: "Does something useful", href: "pages/my-tool.html" },
+    ];
+    const grid = document.getElementById('pages-grid');
+    const empty = document.getElementById('empty-state');
+    if (pages.length > 0) {
+      empty.style.display = 'none';
+      pages.forEach(p => {
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = p.href;
+        a.innerHTML = `<div class="card-title">${p.title}</div><div class="card-desc">${p.desc}</div>`;
+        grid.appendChild(a);
+      });
+    }
+  </script>
+</body>
+</html>
