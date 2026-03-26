@@ -400,11 +400,19 @@
       if (e.key === 'Enter') handleLogin();
     });
 
-    // Check session on load
-    const savedSession = sessionStorage.getItem(SESSION_KEY);
-    if (savedSession === ALLOWED_EMAIL) {
-      showApp(savedSession);
+    // Check auth — runs on fresh load AND on back-navigation (bfcache restore)
+    function checkAuth() {
+      const savedSession = sessionStorage.getItem(SESSION_KEY);
+      if (savedSession === ALLOWED_EMAIL) {
+        showApp(savedSession);
+      } else {
+        document.getElementById('app').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+      }
     }
+
+    // pageshow fires on both fresh loads and bfcache restores (back button)
+    window.addEventListener('pageshow', checkAuth);
 
     // ── PAGES ──
     const pages = [
