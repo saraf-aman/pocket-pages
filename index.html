@@ -15,15 +15,126 @@
       min-height: 100vh;
     }
 
+    /* ── LOGIN SCREEN ── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .login-card {
+      background: #fff;
+      border: 1.5px solid #E8E2D9;
+      border-radius: 20px;
+      padding: 2.8rem 2.4rem 2.4rem;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+    }
+
+    .login-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: #A89F93;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .login-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.9rem;
+      color: #1B2C4A;
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+
+    .login-title em {
+      font-style: italic;
+      color: #7A9AC0;
+    }
+
+    .login-sub {
+      font-size: 13px;
+      color: #8A8479;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #A89F93;
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      border: 1.5px solid #E0DAD2;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: #2C2C2A;
+      background: #FDFCFA;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .field input:focus {
+      border-color: #7A9AC0;
+      background: #fff;
+    }
+
+    .login-btn {
+      width: 100%;
+      margin-top: 0.4rem;
+      padding: 0.75rem;
+      background: #1B2C4A;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.12s;
+    }
+
+    .login-btn:hover { background: #243d66; }
+    .login-btn:active { transform: scale(0.98); }
+
+    .login-error {
+      margin-top: 0.9rem;
+      font-size: 13px;
+      color: #C0392B;
+      text-align: center;
+      min-height: 18px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .login-error.visible { opacity: 1; }
+
+    /* ── MAIN APP ── */
+    #app { display: none; }
+
     .page {
       max-width: 680px;
       margin: 0 auto;
       padding: 3.5rem 1.5rem 5rem;
     }
 
-    .header {
-      margin-bottom: 2.8rem;
-    }
+    .header { margin-bottom: 2.8rem; }
 
     .header-eyebrow {
       font-size: 11px;
@@ -43,16 +154,36 @@
       margin-bottom: 10px;
     }
 
-    .header-title em {
-      font-style: italic;
-      color: #7A9AC0;
-    }
+    .header-title em { font-style: italic; color: #7A9AC0; }
 
     .header-sub {
       font-size: 14px;
       color: #8A8479;
       line-height: 1.6;
     }
+
+    .header-meta {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #B0A89C;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logout-btn {
+      background: none;
+      border: 1px solid #D9D2C8;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11.5px;
+      color: #A89F93;
+      padding: 2px 10px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .logout-btn:hover { border-color: #A89F93; color: #6B6460; }
 
     .divider {
       width: 40px;
@@ -98,11 +229,7 @@
       transform: translate(20px, -20px);
     }
 
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.08);
-    }
-
+    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.08); }
     .card:active { transform: translateY(0); }
 
     .card-icon {
@@ -116,79 +243,39 @@
       margin-bottom: 12px;
     }
 
-    .card-title {
-      font-size: 15px;
-      font-weight: 500;
-      line-height: 1.3;
-      margin-bottom: 5px;
-    }
-
-    .card-desc {
-      font-size: 12.5px;
-      line-height: 1.55;
-      opacity: 0.75;
-    }
+    .card-title { font-size: 15px; font-weight: 500; line-height: 1.3; margin-bottom: 5px; }
+    .card-desc { font-size: 12.5px; line-height: 1.55; opacity: 0.75; }
 
     .card-arrow {
       position: absolute;
-      bottom: 1.2rem;
-      right: 1.3rem;
-      font-size: 14px;
-      opacity: 0.35;
+      bottom: 1.2rem; right: 1.3rem;
+      font-size: 14px; opacity: 0.35;
       transition: opacity 0.15s, transform 0.15s;
     }
 
-    .card:hover .card-arrow {
-      opacity: 0.65;
-      transform: translate(2px, -2px);
-    }
+    .card:hover .card-arrow { opacity: 0.65; transform: translate(2px, -2px); }
 
-    /* Accent themes */
-    .accent-teal {
-      background: #EAF5F0;
-      border-color: #C2E2D6;
-      color: #0F5040;
-    }
+    .accent-teal { background: #EAF5F0; border-color: #C2E2D6; color: #0F5040; }
     .accent-teal .card-icon { background: #C2E2D6; }
     .accent-teal::before { background: #1D9E75; }
 
-    .accent-blue {
-      background: #EBF2FA;
-      border-color: #C2D8EF;
-      color: #0C3A6B;
-    }
+    .accent-blue { background: #EBF2FA; border-color: #C2D8EF; color: #0C3A6B; }
     .accent-blue .card-icon { background: #C2D8EF; }
     .accent-blue::before { background: #378ADD; }
 
-    .accent-amber {
-      background: #FDF4E7;
-      border-color: #F5DDA8;
-      color: #6B3E0A;
-    }
+    .accent-amber { background: #FDF4E7; border-color: #F5DDA8; color: #6B3E0A; }
     .accent-amber .card-icon { background: #F5DDA8; }
     .accent-amber::before { background: #EF9F27; }
 
-    .accent-coral {
-      background: #FBF0EC;
-      border-color: #F5CBBB;
-      color: #6B2A12;
-    }
+    .accent-coral { background: #FBF0EC; border-color: #F5CBBB; color: #6B2A12; }
     .accent-coral .card-icon { background: #F5CBBB; }
     .accent-coral::before { background: #D85A30; }
 
-    .accent-purple {
-      background: #F2F0FE;
-      border-color: #D4CFFA;
-      color: #2E2570;
-    }
+    .accent-purple { background: #F2F0FE; border-color: #D4CFFA; color: #2E2570; }
     .accent-purple .card-icon { background: #D4CFFA; }
     .accent-purple::before { background: #7F77DD; }
 
-    .accent-green {
-      background: #EFF6E5;
-      border-color: #CCDFA9;
-      color: #2A4D10;
-    }
+    .accent-green { background: #EFF6E5; border-color: #CCDFA9; color: #2A4D10; }
     .accent-green .card-icon { background: #CCDFA9; }
     .accent-green::before { background: #639922; }
 
@@ -212,61 +299,139 @@
       gap: 8px;
     }
 
-    .footer::before {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #E0DAD2;
-    }
+    .footer::before { content: ''; flex: 1; height: 1px; background: #E0DAD2; }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header class="header">
-      <div class="header-eyebrow">Your personal space</div>
-      <h1 class="header-title">Pocket <em>Pages</em></h1>
-      <p class="header-sub">Tools &amp; references built with Claude, hosted here — always one tap away.</p>
-    </header>
 
-    <div class="divider"></div>
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-eyebrow">Welcome back</div>
+      <h1 class="login-title">Pocket <em>Pages</em></h1>
+      <p class="login-sub">Sign in to access your personal space.</p>
 
-    <div class="section-label">Pages</div>
-    <div class="grid" id="pages-grid"></div>
-    <div class="empty-state" id="empty-state" style="display:none">
-      Nothing here yet.<br>Ask Claude to build something and it'll appear right here.
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="email-input" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="password-input" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+
+      <button class="login-btn" onclick="handleLogin()">Sign in</button>
+      <div class="login-error" id="login-error">Incorrect email or password.</div>
     </div>
+  </div>
 
-    <div class="footer">built with Claude</div>
+  <!-- MAIN APP -->
+  <div id="app">
+    <div class="page">
+      <header class="header">
+        <div class="header-eyebrow">Your personal space</div>
+        <h1 class="header-title">Pocket <em>Pages</em></h1>
+        <p class="header-sub">Tools &amp; references built with Claude, hosted here — always one tap away.</p>
+        <div class="header-meta">
+          <span id="logged-in-as"></span>
+          <button class="logout-btn" onclick="handleLogout()">Sign out</button>
+        </div>
+      </header>
+
+      <div class="divider"></div>
+
+      <div class="section-label">Pages</div>
+      <div class="grid" id="pages-grid"></div>
+      <div class="empty-state" id="empty-state" style="display:none">
+        Nothing here yet.<br>Ask Claude to build something and it'll appear right here.
+      </div>
+
+      <div class="footer">built with Claude</div>
+    </div>
   </div>
 
   <script>
-    const accents = ['accent-teal','accent-blue','accent-amber','accent-coral','accent-purple','accent-green'];
-    const icons = ['🧺','📊','📝','🔧','📅','💡','🗂','⚡','🎯','📌'];
+    const ALLOWED_EMAIL = "amansaraf28@gmail.com";
+    const PASSWORD_HASH = "545cb23c22ea43be65f044ec7c62a3ecf3677a47b279891a653759c84031ab91";
+    const SESSION_KEY   = "pp_auth";
 
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    async function handleLogin() {
+      const email    = document.getElementById('email-input').value.trim().toLowerCase();
+      const password = document.getElementById('password-input').value;
+      const errorEl  = document.getElementById('login-error');
+
+      const hash = await sha256(password);
+
+      if (email === ALLOWED_EMAIL && hash === PASSWORD_HASH) {
+        sessionStorage.setItem(SESSION_KEY, email);
+        showApp(email);
+      } else {
+        errorEl.classList.add('visible');
+        document.getElementById('password-input').value = '';
+        setTimeout(() => errorEl.classList.remove('visible'), 3000);
+      }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem(SESSION_KEY);
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('email-input').value = '';
+      document.getElementById('password-input').value = '';
+    }
+
+    function showApp(email) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      document.getElementById('logged-in-as').textContent = email;
+      renderGrid();
+    }
+
+    // Allow Enter key to submit
+    document.getElementById('password-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleLogin();
+    });
+    document.getElementById('email-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleLogin();
+    });
+
+    // Check session on load
+    const savedSession = sessionStorage.getItem(SESSION_KEY);
+    if (savedSession === ALLOWED_EMAIL) {
+      showApp(savedSession);
+    }
+
+    // ── PAGES ──
     const pages = [
       { title: "Laundry Guide", desc: "Wash categories, detergent dosing, washer & dryer settings for every load type.", href: "pages/laundry-guide.html", icon: "🧺", accent: "accent-teal" },
     ];
 
-    const grid = document.getElementById('pages-grid');
-    const empty = document.getElementById('empty-state');
+    function renderGrid() {
+      const grid  = document.getElementById('pages-grid');
+      const empty = document.getElementById('empty-state');
+      grid.innerHTML = '';
 
-    if (pages.length > 0) {
-      pages.forEach((p, i) => {
-        const accent = p.accent || accents[i % accents.length];
-        const icon = p.icon || icons[i % icons.length];
-        const a = document.createElement('a');
-        a.className = `card ${accent}`;
-        a.href = p.href;
-        a.innerHTML = `
-          <div class="card-icon">${icon}</div>
-          <div class="card-title">${p.title}</div>
-          <div class="card-desc">${p.desc}</div>
-          <div class="card-arrow">↗</div>
-        `;
-        grid.appendChild(a);
-      });
-    } else {
-      empty.style.display = 'block';
+      if (pages.length > 0) {
+        pages.forEach(p => {
+          const a = document.createElement('a');
+          a.className = `card ${p.accent}`;
+          a.href = p.href;
+          a.innerHTML = `
+            <div class="card-icon">${p.icon}</div>
+            <div class="card-title">${p.title}</div>
+            <div class="card-desc">${p.desc}</div>
+            <div class="card-arrow">↗</div>
+          `;
+          grid.appendChild(a);
+        });
+      } else {
+        empty.style.display = 'block';
+      }
     }
   </script>
 </body>
