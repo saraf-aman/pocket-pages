@@ -2,7 +2,26 @@
  * Pocket Pages — shared navigation
  * To add a new page: add one entry to the PAGES array below.
  * Every page that includes this script will automatically show the updated menu.
+ *
+ * Auth guard is built in here — any page loading this script is automatically
+ * protected. No per-page auth code needed.
  */
+
+// ── Auth guard (runs immediately, before anything else) ───────────────────────
+(function () {
+  const SESSION_KEY   = 'pp_auth';
+  const ALLOWED_EMAIL = 'amansaraf28@gmail.com';
+  const scriptTag     = document.currentScript;
+  const rootPath      = scriptTag ? (scriptTag.getAttribute('data-root') || '..') : '..';
+
+  if (sessionStorage.getItem(SESSION_KEY) !== ALLOWED_EMAIL) {
+    window.location.replace(rootPath + '/index.html');
+    // Stop all further script execution on this page
+    throw new Error('pp:unauthenticated');
+  }
+})();
+
+// ── Navigation ────────────────────────────────────────────────────────────────
 const PAGES = [
   { title: "Laundry Guide", href: "laundry-guide.html", icon: "🧺" },
   // { title: "My New Page", href: "my-new-page.html", icon: "📝" },
@@ -86,10 +105,10 @@ const PAGES = [
 
   // ── Wire up interactions ──────────────────────────────────────────────────
   function toggleMenu() {
-    const panel = document.getElementById('ppPanel');
+    const panel   = document.getElementById('ppPanel');
     const overlay = document.getElementById('ppOverlay');
-    const btn = document.getElementById('ppHamBtn');
-    const isOpen = panel.classList.contains('open');
+    const btn     = document.getElementById('ppHamBtn');
+    const isOpen  = panel.classList.contains('open');
     panel.classList.toggle('open', !isOpen);
     overlay.classList.toggle('visible', !isOpen);
     btn.classList.toggle('open', !isOpen);
